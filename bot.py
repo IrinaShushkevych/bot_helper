@@ -5,7 +5,6 @@ def read_phonebook():
     phonebook = []
     with open('phonebook.txt') as f:
         line = f.readlines()
-        f.close()
     for el in line:
         element = (el.replace('\n','')).split(' ')
         phonebook.append({'name': element[0], 'phone': element[1]})
@@ -13,7 +12,6 @@ def read_phonebook():
 def add_phonebook(name, phone):
     with open('phonebook.txt', 'a') as f:
         f.write(f'{name} {phone}\n')
-        f.close()
         print(f'{name} with phone number {phone} added to phonebook.')
         read_phonebook()
 
@@ -24,29 +22,27 @@ def change_phonebook(name, phone):
             el['phone'] = phone
     with open('phonebook.txt', 'w') as f:
         for el in phonebook:
-            f.write(el['name'] + ' ' + el['phone'] + '\n')
+            f.write(f"{el['name']} {el['phone']}\n")
         print(f"{name}'s phone number changed.")
-        f.close()
         read_phonebook()
 
 def remove_phonebook(name):
     global phonebook
-    for el in phonebook:
-        if el['name'].lower() == name.lower():
-            phonebook.remove(el)
+    for element in phonebook:
+        if element['name'].lower() == name.lower():
+            phonebook.remove(element)
     with open('phonebook.txt', 'w') as f:
-        for el in phonebook:
-            f.write(el['name'] + ' ' + el['phone'] + '\n')
+        for element in phonebook:
+            f.write(f"{element['name']} {element['phone']}\n")
         print(f"{name} deleted.")
-        f.close()
         read_phonebook()
 
-def check_args(count_args = None, name = None, phone = None, *args):
+def check_args(count_args=None, name=None, phone=None, *args):
     if count_args == 1:
         if not name:
             raise ValueError('Enter user name')
     elif count_args == 2:
-        if (not name) or (not phone):
+        if not (name and phone):
             raise ValueError('Give me name and phone please')
     return True
 
@@ -58,22 +54,22 @@ def func_exit():
     print('Good bye!')
     return False
 
-def func_add(name = None, phone = None, *args):
+def func_add(name=None, phone=None, *args):
     check_args(2, name, phone, *args)
     add_phonebook(name, phone)
     return True
 
-def func_change(name = None, phone = None, *args):
+def func_change(name=None, phone=None, *args):
     check_args(2, name, phone, *args)
     change_phonebook(name, phone)
     return True
 
-def func_remove(name = None, *args):
+def func_remove(name=None, *args):
     check_args(1, name, *args)
     remove_phonebook(name)
     return True
 
-def func_phone(name = None, *args):
+def func_phone(name=None, *args):
     check_args(1, name, *args)
     for el in phonebook:
         if el['name'].lower() == name.lower():
@@ -84,8 +80,8 @@ def func_show_all():
     print('-'*43)
     print('|{:^20}|{:^20}|'.format('Name', 'Phone'))
     print('-'*43)
-    for el in phonebook:
-        print('|{:^20}|{:^20}|'.format(el['name'], el['phone']))
+    for element in phonebook:
+        print('|{:^20}|{:^20}|'.format(element['name'], element['phone']))
     print('-'*43)
     return True
 
